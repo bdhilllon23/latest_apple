@@ -1,5 +1,7 @@
 import { Fragment, useState, type FormEvent, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import Nav from '../apple-login/Nav'
+import Footer from '../apple-login/Footer'
 
 const SUPPORT = 'https://support.apple.com'
 
@@ -93,70 +95,89 @@ export default function OrderDetailsPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#1d1d1f]">
-      <GlobalHeader />
 
-      <main className="mx-auto w-full max-w-[980px] flex-1 px-[22px] pb-20">
+
+<>
+
+  <GlobalHeader />
+
+    <div className="min-h-screen bg-gray-100 p-4 sm:p-6 md:p-10 flex justify-center items-start">
+      
+    {/* Responsive Card:
+      w-full = full width on mobile
+      max-w-lg = constrains width on tablets/desktop
+    */}
+    <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+      
+      {/* Header */}
+      <div className="flex items-center p-5 border-b border-gray-100">
+        <div className="bg-black text-white p-2 rounded-full mr-3">
+          <span className="text-xl"></span>
+        </div>
+        <h1 className="text-xl font-bold text-gray-900">Order Details</h1>
+      </div>
+
+      {/* Product Info */}
+      <div className="p-5 flex items-center border-b border-gray-100 hover:bg-gray-50 transition">
+        <div className="w-20 h-20 bg-gray-200 rounded-lg mr-5 flex-shrink-0 animate-pulse"></div>
+        <div className="flex-grow">
+          <p className="font-semibold text-gray-900 text-lg">41mm Elderberry Sport Loop</p>
+          <p className="text-gray-600 font-medium">$49.00</p>
+        </div>
+        <span className="text-gray-400 text-xl font-light">›</span>
+      </div>
+
+      {/* Status Section */}
+      <div className="p-5 border-b border-gray-100">
+        <h2 className="text-lg font-bold text-gray-900 mb-1">Arrives Thu Feb 16</h2>
+        <p className="text-sm text-gray-600 mb-5 leading-relaxed">
+          Your item is on the way. Tracking information will be available shortly. A signature will be required upon delivery.
+        </p>
         
-        <section className="flex justify-center pb-2 pb-8 border-b border-[#d2d2d7]">
-            <div className="w-1/2">
-                <img src={'/images/s11_01ae61a6b_2x'} width={250} height={200} alt="" />
-            </div>
-            <div className="ml-6 self-center">
-                
-                <h3 className="ml-6 self-center text-[28px] font-semibold tracking-[0.01em]">41mm Elderberry Sport Loop</h3>
-                <span className="ml-auto self-center text-[17px] text-[#424245]">$49.00</span>
-            </div>
-        </section>
+        {/* Progress Bar */}
+        <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+          <div className="bg-green-600 h-2.5 rounded-full" style={{ width: '66%' }}></div>
+        </div>
+        <div className="flex justify-between text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider">
+          <span>Processing</span>
+          <span>Preparing</span>
+          <span className="text-black">Shipped</span>
+          <span>Delivered</span>
+        </div>
+      </div>
 
-        <section className="pb-2 border-b border-[#d2d2d7]">
-            <div className="my-12 flex items-center gap-6">
-                <div className="w-1/2">
-                
-                    <h3 className="mb-2.5 text-[19px] font-semibold tracking-[0.01em]">Arive Soon Apr 4</h3>
-                    <p className="mb-3 text-[17px] leading-[1.47] text-[#424245]">
-                    Get personalised access to solutions for your Apple products.
-                    </p>
-                </div>
-            </div> 
-        </section>
-
-        <section className="pb-2 border-b border-[#d2d2d7]">
-            <div className="w-1/2">
-                
-                    <h3 className="mb-2.5 text-[19px] font-semibold tracking-[0.01em]">Ship too</h3>
-                    <p className="mb-3 text-[17px] leading-[1.47] text-[#424245]">
-                    Allie Perry
-                    </p>
-                    <p className="mb-3 text-[17px] leading-[1.47] text-[#424245]">
-                    1201 1st st, Campbell CA 95008
-                    </p>
-                </div>
-        </section>
-
-        <section className="flex pb-2 border-b border-[#d2d2d7]">
-            <div className="w-1/2 text-left">
-                <h3> Order Number</h3>
-                <h3> Total</h3>
-            </div>
-            <div className="w-1/2 text-right">
-                <h3> 123456789</h3>
-                <h3> $999.00</h3>
-            </div>
-            
-        </section>
-
-        <section className="item-center flex justify-center gap-6">
-          <button type="button" className="ml-auto self-center px-4 py-2 rounded-4 bg-black text-white" aria-label="Submit search">
-                Cancel Order
-            </button>
-        </section>
-
+      {/* Shipping & Billing */}
+      <div className="p-5 text-sm">
+        <div className="mb-6">
+          <p className="font-bold text-gray-900 mb-1">Ship to</p>
+          <p className="text-gray-700">Allie Perry</p>
+          <p className="text-gray-700">1201 S 1st St Campbell CA 95008</p>
+        </div>
         
-      </main>
+        <div className="space-y-3">
+          <div className="flex justify-between">
+            <span className="text-gray-500">Order Number</span>
+            <span className="font-semibold">1234567890</span>
+          </div>
+          <div className="flex justify-between pt-3 border-t border-gray-100">
+            <span className="text-gray-500 text-lg">Total</span>
+            <span className="font-bold text-xl">$652.17</span>
+          </div>
+        </div>
+      </div>
 
-      <SiteFooter />
+      {/* Action Button */}
+      <div className="p-5 bg-gray-50 border-t border-gray-100">
+        <button className="w-full bg-black text-white font-bold py-4 rounded-xl hover:bg-gray-800 active:scale-95 transition-all duration-200">
+          Cancel Order
+        </button>
+      </div>
     </div>
+  </div>
+
+  <SiteFooter />
+  </>
+    
   )
 }
 
@@ -327,7 +348,6 @@ function FooterColumn({
     </div>
   )
 }
-
 function ContentRows({ rows }: { rows: Block[][] }) {
   return (
     <>
@@ -355,13 +375,5 @@ function ContentRows({ rows }: { rows: Block[][] }) {
   )
 }
 
-function SearchGlyph() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden>
-      <path
-        fill="currentColor"
-        d="M14.3 13.2l3.9 3.9a1 1 0 01-1.4 1.4l-3.9-3.9a7 7 0 111.4-1.4zM8 3a5 5 0 100 10A5 5 0 008 3z"
-      />
-    </svg>
-  )
-}
+ 
+
