@@ -126,27 +126,93 @@ export default function OrderCancelPage() {
 
         
 
-        <section className="pb-2 border-b border-[#d2d2d7]">
-            <div className="w-1/2 text-left">
-                <button type="button" className="border border-black/[0.08] rounded-4 px-4 py-2">
-                  GPay
-                </button>
-            </div>
-            <div className="w-1/2 text-right">
-                <button type="button" className="border border-black/[0.08] rounded-4 px-4 py-2">
-                  TD Bank
-                  </button>
-            </div>
-            
-        </section>
+        <section className="pb-6 border-b border-[#d2d2d7]">
+  {/* Payment Method Buttons - Centered */}
+  <div className="flex justify-center gap-4 mb-6">
+    <button 
+      type="button" 
+      className="border border-gray-300 rounded-full px-6 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+    >
+      GPay
+    </button>
+    <button 
+      type="button" 
+      className="border border-gray-300 rounded-full px-6 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+    >
+      TD Bank
+    </button>
+    <button 
+      type="button" 
+      className="border border-gray-300 rounded-full px-6 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+    >
+      RC Bank
+    </button>
+  </div>
+</section>
 
-        <section className="item-center flex justify-center gap-6">
-          <div className="">
-            <input type="text" placeholder="Cardholder Name" className="border border-black/[0.08]" />
-            <input type="text" placeholder="123456789" className="border border-black/[0.08]" />
-            
-          </div>
-        </section>
+<section className="py-6">
+  <h3 className="text-lg font-semibold text-gray-800 mb-4">Card Details</h3>
+  
+  {/* Card Form */}
+  <div className="max-w-md mx-auto space-y-4">
+    {/* Cardholder Name */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Cardholder Name
+      </label>
+      <input 
+        type="text" 
+        placeholder="John Doe" 
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      />
+    </div>
+
+    {/* Card Number */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Card Number
+      </label>
+      <input 
+        type="text" 
+        placeholder="1234 5678 9012 3456" 
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      />
+    </div>
+
+    {/* Expiry Date and CVV - Row layout */}
+    <div className="flex gap-4">
+      <div className="flex-1">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Expiry Date
+        </label>
+        <input 
+          type="text" 
+          placeholder="MM/YY" 
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+      <div className="flex-1">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          CVV
+        </label>
+        <input 
+          type="text" 
+          placeholder="123" 
+          maxLength={4}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+    </div>
+
+    {/* Submit Button */}
+    <button 
+      type="submit"
+      className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 mt-4"
+    >
+      Pay Now
+    </button>
+  </div>
+</section>
 
         
       </main>
