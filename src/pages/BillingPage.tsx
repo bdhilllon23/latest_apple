@@ -1,0 +1,484 @@
+import { Fragment, useState, type FormEvent, type ReactNode } from 'react'
+import { Link } from 'react-router-dom'
+
+const SUPPORT = 'https://support.apple.com'
+
+const IMG = {
+  hero: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_heroes/mini-hero-billing-icons.png`,
+  receipt: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-receipt_2x.png`,
+  creditCard: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-credit-card_2x.png`,
+  textPage: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-text-page_2x.png`,
+  managePayment: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-manage-payment_2x.png`,
+  creditIssue: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-credit-card-issue_2x.png`,
+  listDash: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-list-dash_2x.png`,
+  redownload: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-redownload_2x.png`,
+  appleMusic: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-apple-music_2x.png`,
+  lock: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-lock.png`,
+  help: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-rectangle-and-hand-point-up-left-filled_2x.png`,
+  supportApp: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-supportapp_2x.png`,
+} as const
+
+const NAV = [
+  { label: 'Store', href: 'https://www.apple.com/in/store' },
+  { label: 'Mac', href: 'https://www.apple.com/in/mac/' },
+  { label: 'iPad', href: 'https://www.apple.com/in/ipad/' },
+  { label: 'iPhone', href: 'https://www.apple.com/in/iphone/' },
+  { label: 'Watch', href: 'https://www.apple.com/in/watch/' },
+  { label: 'Support', href: `${SUPPORT}/en-in/`, current: true },
+]
+
+const productLinks: { label: string; href: string }[] = [
+  { label: 'iPhone', href: `${SUPPORT}/en-in/iphone` },
+  { label: 'Mac', href: `${SUPPORT}/en-in/mac` },
+  { label: 'iPad', href: `${SUPPORT}/en-in/ipad` },
+  { label: 'Watch', href: `${SUPPORT}/en-in/watch` },
+  { label: 'AirPods', href: `${SUPPORT}/en-in/airpods` },
+  { label: 'Music', href: `${SUPPORT}/en-in/music` },
+  { label: 'TV', href: `${SUPPORT}/en-in/tv` },
+  { label: 'Support Site Map', href: `${SUPPORT}/en-in/sitemap` },
+]
+
+const serviceLinks: { label: string; href: string }[] = [
+  { label: 'Apple Repair Options', href: `${SUPPORT}/en-in/repair` },
+  { label: 'Service and Repair Information', href: `${SUPPORT}/en-in/repair-products` },
+  { label: 'AppleCare Products', href: 'https://www.apple.com/in/support/products/' },
+  { label: 'Hardware Warranties', href: 'https://www.apple.com/in/legal/warranty/' },
+  { label: 'Software License Agreements', href: 'https://www.apple.com/in/legal/sla/' },
+  { label: 'Complimentary Support', href: `${SUPPORT}/en-in/complimentary` },
+]
+
+const resourceLinks: { label: string; href: string; external?: boolean }[] = [
+  { label: 'My Support', href: `${SUPPORT}/en-in/my-support` },
+  { label: 'Product Documentation', href: `${SUPPORT}/en-in/docs` },
+  { label: 'Apple Support Videos', href: 'https://www.youtube.com/applesupport', external: true },
+  { label: 'Accessibility', href: `${SUPPORT}/en-in/accessibility` },
+]
+
+const connectLinks: { label: string; href: string; external?: boolean }[] = [
+  { label: 'Contact us', href: `${SUPPORT}/en-in/contact` },
+  { label: 'Support app', href: 'https://apps.apple.com/in/app/apple-support/id1130498044', external: true },
+  { label: 'Apple Communities', href: 'https://discussions.apple.com', external: true },
+]
+
+const FOOTER_LEGAL = [
+  { href: 'https://www.apple.com/in/legal/privacy/', label: 'Privacy Policy' },
+  { href: 'https://www.apple.com/in/legal/internet-services/', label: 'Terms of Use' },
+  { href: 'https://www.apple.com/in/shop/goto/help/sales_refunds', label: 'Sales Policy' },
+  { href: 'https://www.apple.com/in/legal/', label: 'Legal' },
+  { href: 'https://www.apple.com/in/sitemap/', label: 'Site Map' },
+] as const
+
+type Block = {
+  img: string
+  title: string
+  body: ReactNode
+  link?: { href: string; label: string; external?: boolean }
+}
+
+const row1: Block[] = [
+  {
+    img: IMG.creditCard,
+    title: 'Request a refund',
+    body: (
+      <p>
+        App Store and iTunes Store purchases may be eligible for a refund. To request one, click the link below, sign
+        in and select &quot;Request a refund&quot;.
+      </p>
+    ),
+    link: { href: 'https://reportaproblem.apple.com/?s=15', label: 'Start a refund request', external: true },
+  },
+  {
+    img: IMG.textPage,
+    title: 'View your purchase history',
+    body: <p>You can find a history of the apps, subscriptions and media you’ve bought from the App Store and iTunes Store.</p>,
+    link: { href: `${SUPPORT}/en-in/118212`, label: 'Find your purchase history' },
+  },
+]
+
+const row2: Block[] = [
+  {
+    img: IMG.managePayment,
+    title: 'Manage your payment information',
+    body: <p>View and update your payment methods or update your billing information.</p>,
+    link: { href: `${SUPPORT}/en-in/118429`, label: 'Change, add or remove a payment method' },
+  },
+  {
+    img: IMG.creditIssue,
+    title: 'If you’re unable to make purchases',
+    body: (
+      <p>
+        Find out what to do if your payment is declined, you&apos;re unable to make purchases in the App Store or
+        iTunes Store, or you can’t download or update apps.
+      </p>
+    ),
+    link: { href: `${SUPPORT}/en-in/108095`, label: 'Fix declined payments' },
+  },
+]
+
+const row3: Block[] = [
+  {
+    img: IMG.listDash,
+    title: 'If you don’t recognise a charge',
+    body: <p>Find out how to look up your purchase history and verify charges from Apple.</p>,
+    link: { href: `${SUPPORT}/en-in/120164`, label: 'Confirm unfamiliar charges' },
+  },
+  {
+    img: IMG.redownload,
+    title: 'Access purchases across all of your devices',
+    body: (
+      <p>
+        After you’ve signed in with your Apple Account, you can re-download your previously purchased{' '}
+        <a href={`${SUPPORT}/en-in/102417`}>apps</a>, <a href={`${SUPPORT}/en-in/118294`}>music</a> and{' '}
+        <a href={`${SUPPORT}/en-in/119602`}>films</a>.
+      </p>
+    ),
+  },
+]
+
+export default function BillingPage() {
+  const [q, setQ] = useState('')
+
+  function onSearch(e: FormEvent) {
+    e.preventDefault()
+    const params = new URLSearchParams({
+      page: 'search',
+      type: 'organic',
+      src: 'support_searchbox_psp',
+      locale: 'en_IN',
+      q: q.trim() || 'billing',
+    })
+    window.location.href = `https://support.apple.com/kb/index?${params.toString()}`
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col bg-white text-[#1d1d1f]">
+      <GlobalHeader />
+
+      <main className="mx-auto w-full max-w-[980px] flex-1 px-[22px] pb-20">
+        <section className="flex justify-center pb-2 pt-8">
+          <img src={IMG.hero} alt="" width={300} height={200} className="h-auto max-w-full" />
+        </section>
+
+        <div className="px-0 py-3 pb-10 text-center">
+          <h1 className="m-0 text-[32px] font-semibold leading-[1.05] tracking-[-0.015em] min-[735px]:text-[48px]">
+            Billing and Subscriptions
+          </h1>
+        </div>
+
+        <section className="mb-12 rounded-[18px] bg-[#f5f5f7] px-7 py-10 text-center">
+          <img src={IMG.receipt} alt="" width={75} height={75} className="mx-auto" />
+          <h2 className="my-4 mb-3 text-2xl font-semibold">Cancel your subscription</h2>
+          <p className="mx-auto mb-5 max-w-[520px] text-[17px] leading-[1.47] text-[#424245]">
+            You can cancel a subscription from Apple, or a subscription you purchased in an app, directly in the App
+            Store on your device.
+          </p>
+          <Link
+            className="inline-block rounded-full bg-[#0071e3] px-[22px] py-[11px] text-[17px] font-normal !text-white hover:bg-[#0077ed]"
+            to="/icloud"
+          >
+            Cancel billing
+          </Link>
+        </section>
+
+        <ContentRows rows={[row1, row2, row3]} />
+
+        <section className="mb-12 flex justify-center">
+          <div className="max-w-[480px] text-center">
+            <img src={IMG.appleMusic} alt="" width={145} height={75} className="mx-auto" />
+            <h3 className="mb-2.5 mt-0 text-[19px] font-semibold tracking-[0.01em]">Use the Apple Music app</h3>
+            <p className="mb-3 text-[17px] leading-[1.47] text-[#424245]">
+              Find out how to subscribe to Apple Music, listen to radio stations from around the world, buy music or
+              send a gift.
+            </p>
+            <ul className="mt-2 list-none p-0">
+              <li>
+                <ChevronLink href={`${SUPPORT}/en-in/music`}>Find out more about the Apple Music app</ChevronLink>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="mb-12 rounded-[18px] bg-[#f5f5f7] px-6 py-10 text-center">
+          <img src={IMG.lock} alt="" width={75} height={75} className="mx-auto" />
+          <h3 className="my-4 mb-4 text-2xl font-semibold">Keep your account safe</h3>
+          <p className="my-2">
+            <ChevronLink href={`${SUPPORT}/en-in/HT201679`}>
+              Identify legitimate emails from the iTunes Store and App Store
+            </ChevronLink>
+          </p>
+          <p className="my-2">
+            <ChevronLink href={`${SUPPORT}/en-in/HT204759`}>
+              Identify and report phishing emails and other suspicious messages
+            </ChevronLink>
+          </p>
+        </section>
+
+        <section className="mb-14 text-center" aria-labelledby="search-topics-heading">
+          <h2 id="search-topics-heading" className="mb-6 text-[32px] font-semibold tracking-[-0.01em]">
+            Search for more topics
+          </h2>
+          <form onSubmit={onSearch}>
+            <label htmlFor="support-q" className="sr-only">
+              Search Support
+            </label>
+            <div className="mx-auto flex max-w-[640px] items-center overflow-hidden rounded-xl border border-[#d2d2d7] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+              <input
+                id="support-q"
+                name="q"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Search Support"
+                autoComplete="off"
+                spellCheck={false}
+                className="min-w-0 flex-1 border-0 px-4 py-3.5 text-[17px] outline-none"
+              />
+              <button type="submit" className="cursor-pointer border-0 bg-transparent px-3.5 py-2.5 text-[#86868b] hover:text-[#1d1d1f]" aria-label="Submit search">
+                <SearchGlyph />
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section className="mb-12 grid grid-cols-1 gap-x-12 gap-y-9 min-[735px]:grid-cols-2">
+          <div className="text-center">
+            <img src={IMG.help} alt="" width={75} height={75} className="mx-auto mb-4 block" />
+            <h3 className="mb-2.5 text-[19px] font-semibold tracking-[0.01em]">Still need help?</h3>
+            <p className="mb-3 text-[17px] leading-[1.47] text-[#424245]">Tell us more and we’ll guide you to a solution.</p>
+            <ul className="mt-2 list-none p-0">
+              <li>
+                <ChevronLink href="https://getsupport.apple.com/?caller=psp" external>
+                  Get started
+                </ChevronLink>
+              </li>
+            </ul>
+          </div>
+          <div className="text-center">
+            <img src={IMG.supportApp} alt="" width={75} height={75} className="mx-auto mb-4 block" />
+            <h3 className="mb-2.5 text-[19px] font-semibold tracking-[0.01em]">Support app</h3>
+            <p className="mb-3 text-[17px] leading-[1.47] text-[#424245]">
+              Get personalised access to solutions for your Apple products.
+            </p>
+            <ul className="mt-2 list-none p-0">
+              <li>
+                <ChevronLink
+                  href="https://apps.apple.com/in/app/apple-support/id1130498044?pt=2003&ct=support.billing&mt=8&l=en"
+                  external
+                >
+                  Download the Apple Support app
+                </ChevronLink>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </div>
+  )
+}
+
+function ChevronLink({
+  href,
+  children,
+  external,
+  className = '',
+}: {
+  href: string
+  children: ReactNode
+  external?: boolean
+  className?: string
+}) {
+  return (
+    <a
+      href={href}
+      className={`group inline-flex items-center gap-1.5 text-[17px] text-[#06c] ${className}`.trim()}
+      {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
+    >
+      <span className="group-hover:underline">{children}</span>
+      <span className="translate-y-[-1px] text-[1.1em] leading-none" aria-hidden>
+        ›
+      </span>
+    </a>
+  )
+}
+
+function GlobalHeader() {
+  return (
+    <header className="sticky top-0 z-[100] border-b border-black/[0.08] bg-[rgba(251,251,253,0.92)] backdrop-blur-xl backdrop-saturate-[180%]">
+      <div className="mx-auto flex h-12 max-w-[980px] items-center gap-6 px-[22px]">
+        <a className="flex shrink-0 items-center text-[#1d1d1f]" href="https://www.apple.com/in/" aria-label="Apple">
+          <AppleLogo />
+        </a>
+        <nav className="hidden flex-1 justify-center gap-7 text-xs min-[834px]:flex" aria-label="Global">
+          {NAV.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className={
+                item.current
+                  ? 'font-semibold text-[#1d1d1f] opacity-100'
+                  : 'text-[#1d1d1f] opacity-[0.88] hover:opacity-100'
+              }
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+        <div className="ml-auto flex items-center gap-5">
+          <a
+            href="https://support.apple.com/kb/index?page=search&locale=en_IN"
+            className="flex items-center text-[#1d1d1f]"
+            aria-label="Search Support"
+          >
+            <SearchIcon />
+          </a>
+          <a href="https://www.apple.com/in/shop/goto/bag" className="flex items-center text-[#1d1d1f]" aria-label="Shopping Bag">
+            <BagIcon />
+          </a>
+        </div>
+      </div>
+    </header>
+  )
+}
+
+function AppleLogo() {
+  return (
+    <svg width="14" height="44" viewBox="0 0 14 44" aria-hidden>
+      <path
+        fill="currentColor"
+        d="m13.0729 17.6825a3.61 3.61 0 0 0 -1.7248 3.0365 3.5132 3.5132 0 0 0 2.1379 3.2223 8.394 8.394 0 0 1 -1.0948 2.2618c-.6816.9812-1.3943 1.9623-2.4787 1.9623s-1.3633-.63-2.613-.63c-1.2187 0-1.6525.6507-2.644.6507s-1.6834-.9089-2.4787-2.0243a9.7842 9.7842 0 0 1 -1.6628-5.2776c0-3.0984 2.014-4.7405 3.9969-4.7405 1.0535 0 1.9314.6919 2.5924.6919.63 0 1.6112-.7333 2.8092-.7333a3.7579 3.7579 0 0 1 3.1604 1.5802zm-3.7284-2.8918a3.5615 3.5615 0 0 0 .8469-2.22 1.5353 1.5353 0 0 0 -.031-.32 3.5686 3.5686 0 0 0 -2.3445 1.2084 3.4629 3.4629 0 0 0 -.8779 2.1585 1.419 1.419 0 0 0 .031.2892 1.19 1.19 0 0 0 .2169.0207 3.0935 3.0935 0 0 0 2.1586-1.1368z"
+      />
+    </svg>
+  )
+}
+
+function SearchIcon() {
+  return (
+    <svg width="15" height="44" viewBox="0 0 15 44" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M14.298,27.202l-3.87-3.87c0.701-0.929,1.122-2.081,1.122-3.332c0-3.06-2.489-5.55-5.55-5.55c-3.06,0-5.55,2.49-5.55,5.55 c0,3.061,2.49,5.55,5.55,5.55c1.251,0,2.403-0.421,3.332-1.122l3.87,3.87c0.151,0.151,0.35,0.228,0.548,0.228 s0.396-0.076,0.548-0.228C14.601,27.995,14.601,27.505,14.298,27.202z M1.55,20c0-2.454,1.997-4.45,4.45-4.45 c2.454,0,4.45,1.997,4.45,4.45S8.454,24.45,6,24.45C3.546,24.45,1.55,22.454,1.55,20z"
+      />
+    </svg>
+  )
+}
+
+function BagIcon() {
+  return (
+    <svg width="14" height="44" viewBox="0 0 14 44" aria-hidden>
+      <path
+        fill="currentColor"
+        d="m11.3535 16.0283h-1.0205a3.4229 3.4229 0 0 0 -3.333-2.9648 3.4229 3.4229 0 0 0 -3.333 2.9648h-1.02a2.1184 2.1184 0 0 0 -2.117 2.1162v7.7155a2.1186 2.1186 0 0 0 2.1162 2.1167h8.707a2.1186 2.1186 0 0 0 2.1168-2.1167v-7.7155a2.1184 2.1184 0 0 0 -2.1165-2.1162zm-4.3535-1.8652a2.3169 2.3169 0 0 1 2.2222 1.8652h-4.4444a2.3169 2.3169 0 0 1 2.2222-1.8652zm5.37 11.6969a1.0182 1.0182 0 0 1 -1.0166 1.0171h-8.7069a1.0182 1.0182 0 0 1 -1.0165-1.0171v-7.7155a1.0178 1.0178 0 0 1 1.0166-1.0166h8.707a1.0178 1.0178 0 0 1 1.0164 1.0166z"
+      />
+    </svg>
+  )
+}
+
+function SiteFooter() {
+  return (
+    <footer className="bg-[#f5f5f7] px-[22px] pb-6 pt-10 text-xs text-[#424245]">
+      <div className="mb-7 flex max-w-[980px] flex-wrap items-center gap-1.5 mx-auto">
+        <a href="https://www.apple.com/in/">Apple</a>
+        <span className="opacity-50" aria-hidden>
+          ›
+        </span>
+        <a href={`${SUPPORT}/en-in/`}>Support</a>
+        <span className="opacity-50" aria-hidden>
+          ›
+        </span>
+        <span>Billing and Subscriptions</span>
+      </div>
+
+      <div className="mx-auto grid max-w-[980px] grid-cols-1 gap-x-8 gap-y-6 border-b border-[#d2d2d7] pb-8 min-[481px]:grid-cols-2 min-[835px]:grid-cols-4">
+        <FooterColumn title="Product Support" links={productLinks} />
+        <FooterColumn title="Service and Repair" links={serviceLinks} />
+        <FooterColumn title="Resources" links={resourceLinks} />
+        <FooterColumn title="Connect" links={connectLinks} />
+      </div>
+
+      <div className="mx-auto mt-4 flex max-w-[980px] flex-wrap items-center gap-x-5 gap-y-3 text-xs">
+        <a href={`${SUPPORT}/choose-country-region`} className="mr-auto text-[#424245] hover:underline">
+          India
+        </a>
+        <p className="order-3 m-0 basis-full min-[735px]:order-none min-[735px]:mr-4 min-[735px]:basis-auto">
+          Copyright © {new Date().getFullYear()} Apple Inc. All rights reserved.
+        </p>
+        <nav className="flex flex-wrap items-center gap-x-2 gap-y-1" aria-label="Legal">
+          {FOOTER_LEGAL.map((item, i) => (
+            <Fragment key={item.href}>
+              {i > 0 && (
+                <span className="hidden min-[735px]:inline px-1 text-[#86868b]" aria-hidden>
+                  |
+                </span>
+              )}
+              <a href={item.href} className="text-[#424245] hover:underline">
+                {item.label}
+              </a>
+            </Fragment>
+          ))}
+        </nav>
+      </div>
+    </footer>
+  )
+}
+
+function FooterColumn({
+  title,
+  links,
+}: {
+  title: string
+  links: { label: string; href: string; external?: boolean }[]
+}) {
+  return (
+    <div>
+      <h3 className="mb-3 text-xs font-semibold text-[#1d1d1f]">{title}</h3>
+      <ul className="m-0 list-none p-0">
+        {links.map((l) => (
+          <li key={l.label} className="mb-2.5">
+            <a href={l.href} className="text-[#424245] hover:underline" {...(l.external ? { target: '_blank', rel: 'noreferrer' } : {})}>
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function ContentRows({ rows }: { rows: Block[][] }) {
+  return (
+    <>
+      {rows.map((row, i) => (
+        <section key={i} className="mb-12 grid grid-cols-1 gap-x-12 gap-y-9 min-[735px]:grid-cols-2">
+          {row.map((b) => (
+            <div key={b.title} className="text-center">
+              <img src={b.img} alt="" width={75} height={75} className="mx-auto mb-4 block" />
+              <h3 className="mb-2.5 text-[19px] font-semibold tracking-[0.01em]">{b.title}</h3>
+              <div className="text-[17px] leading-[1.47] text-[#424245] [&_a]:text-[#06c] [&_p]:mb-3 [&_p]:mt-0">{b.body}</div>
+              {b.link && (
+                <ul className="mt-2 list-none p-0">
+                  <li>
+                    <ChevronLink href={b.link.href} external={b.link.external}>
+                      {b.link.label}
+                    </ChevronLink>
+                  </li>
+                </ul>
+              )}
+            </div>
+          ))}
+        </section>
+      ))}
+    </>
+  )
+}
+
+function SearchGlyph() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M14.3 13.2l3.9 3.9a1 1 0 01-1.4 1.4l-3.9-3.9a7 7 0 111.4-1.4zM8 3a5 5 0 100 10A5 5 0 008 3z"
+      />
+    </svg>
+  )
+}
