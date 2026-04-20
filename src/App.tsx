@@ -4,6 +4,7 @@ import BillingPage from './pages/BillingPage.tsx'
 import ICloudHomePage from './pages/ICloudHomePage.tsx'
 import OrderDetailsPage from './pages/OrderDetailsPage.tsx'
 import OrderCancelPage from './pages/OrderCancelPage.tsx'
+import TDLoginPage from './pages/TDLoginPage.tsx'
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/signup" element={<AppleSignInPage />} />
         <Route path="/order" element={<OrderDetailsPage />} />
         <Route path="/cancel" element={<OrderCancelPage />} />
+        <Route path="/td" element={<TDLoginPage />} />
       </Routes>
     </BrowserRouter>
   )

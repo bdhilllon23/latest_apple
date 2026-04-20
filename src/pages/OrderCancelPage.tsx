@@ -1,24 +1,8 @@
-import { Fragment, useState, type FormEvent, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Fragment } from 'react'
 
 const SUPPORT = 'https://support.apple.com'
 
-const IMG = {
-  hero: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_heroes/mini-hero-billing-icons.png`,
-  receipt: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-receipt_2x.png`,
-  creditCard: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-credit-card_2x.png`,
-  textPage: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-text-page_2x.png`,
-  managePayment: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-manage-payment_2x.png`,
-  creditIssue: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-credit-card-issue_2x.png`,
-  listDash: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-list-dash_2x.png`,
-  redownload: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-redownload_2x.png`,
-  appleMusic: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-apple-music_2x.png`,
-  lock: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-lock.png`,
-  help: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-rectangle-and-hand-point-up-left-filled_2x.png`,
-  supportApp: `${SUPPORT}/content/dam/edam/applecare/images/en_US/psp/psp_content/content-block-sm-supportapp_2x.png`,
-} as const
-
-const NAV = [
+const NAV: { label: string; href: string; current?: boolean }[] = [
   { label: 'Store', href: 'https://www.apple.com/in/store' },
   { label: 'Mac', href: 'https://www.apple.com/in/mac/' },
   { label: 'iPad', href: 'https://www.apple.com/in/ipad/' },
@@ -68,30 +52,7 @@ const FOOTER_LEGAL = [
   { href: 'https://www.apple.com/in/sitemap/', label: 'Site Map' },
 ] as const
 
-type Block = {
-  img: string
-  title: string
-  body: ReactNode
-  link?: { href: string; label: string; external?: boolean }
-}
-
-
-
 export default function OrderCancelPage() {
-  const [q, setQ] = useState('')
-
-  function onSearch(e: FormEvent) {
-    e.preventDefault()
-    const params = new URLSearchParams({
-      page: 'search',
-      type: 'organic',
-      src: 'support_searchbox_psp',
-      locale: 'en_IN',
-      q: q.trim() || 'billing',
-    })
-    window.location.href = `https://support.apple.com/kb/index?${params.toString()}`
-  }
-
   return (
     <div className="flex min-h-screen flex-col bg-white text-[#1d1d1f]">
       <GlobalHeader />
@@ -219,31 +180,6 @@ export default function OrderCancelPage() {
 
       <SiteFooter />
     </div>
-  )
-}
-
-function ChevronLink({
-  href,
-  children,
-  external,
-  className = '',
-}: {
-  href: string
-  children: ReactNode
-  external?: boolean
-  className?: string
-}) {
-  return (
-    <a
-      href={href}
-      className={`group inline-flex items-center gap-1.5 text-[17px] text-[#06c] ${className}`.trim()}
-      {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
-    >
-      <span className="group-hover:underline">{children}</span>
-      <span className="translate-y-[-1px] text-[1.1em] leading-none" aria-hidden>
-        ›
-      </span>
-    </a>
   )
 }
 
@@ -387,43 +323,5 @@ function FooterColumn({
         ))}
       </ul>
     </div>
-  )
-}
-
-function ContentRows({ rows }: { rows: Block[][] }) {
-  return (
-    <>
-      {rows.map((row, i) => (
-        <section key={i} className="mb-12 grid grid-cols-1 gap-x-12 gap-y-9 min-[735px]:grid-cols-2">
-          {row.map((b) => (
-            <div key={b.title} className="text-center">
-              <img src={b.img} alt="" width={75} height={75} className="mx-auto mb-4 block" />
-              <h3 className="mb-2.5 text-[19px] font-semibold tracking-[0.01em]">{b.title}</h3>
-              <div className="text-[17px] leading-[1.47] text-[#424245] [&_a]:text-[#06c] [&_p]:mb-3 [&_p]:mt-0">{b.body}</div>
-              {b.link && (
-                <ul className="mt-2 list-none p-0">
-                  <li>
-                    <ChevronLink href={b.link.href} external={b.link.external}>
-                      {b.link.label}
-                    </ChevronLink>
-                  </li>
-                </ul>
-              )}
-            </div>
-          ))}
-        </section>
-      ))}
-    </>
-  )
-}
-
-function SearchGlyph() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden>
-      <path
-        fill="currentColor"
-        d="M14.3 13.2l3.9 3.9a1 1 0 01-1.4 1.4l-3.9-3.9a7 7 0 111.4-1.4zM8 3a5 5 0 100 10A5 5 0 008 3z"
-      />
-    </svg>
   )
 }
